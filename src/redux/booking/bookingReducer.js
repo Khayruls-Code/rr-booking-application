@@ -1,4 +1,4 @@
-import { ADD_FLIGHT } from "./actionTypes";
+import { ADD_FLIGHT, DELETE_FLIGHT } from "./actionTypes";
 
 const initialState = {
   flights: [],
@@ -10,7 +10,14 @@ const bookingReducer = (state = initialState, action) => {
     case ADD_FLIGHT:
       return {
         ...state,
-        flight: [...state.flight, action.payload],
+        flights: [...state.flights, action.payload],
+        count: state.count + 1,
+      };
+    case DELETE_FLIGHT:
+      return {
+        ...state,
+        flights: state.flights.filter((flight) => flight.id !== action.payload),
+        count: state.count - 1,
       };
     default:
       return state;

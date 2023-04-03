@@ -1,17 +1,23 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addFlight } from "../redux/booking/actions";
 
 export const BookingForm = () => {
   const [flightData, setFlightData] = useState({});
+  const dispatch = useDispatch();
+  const count = useSelector((state) => state.allFlight.count);
   const getInputValue = (e) => {
     const key = e.target.name;
     const value = e.target.value;
     const newObj = { ...flightData };
     newObj[key] = value;
+    newObj.id = new Date().getTime();
     setFlightData(newObj);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(flightData);
+    dispatch(addFlight(flightData));
+    e.target.reset();
   };
   return (
     <div className="mt-[160px] mx-4 md:mt-[160px] relative">
@@ -82,6 +88,7 @@ export const BookingForm = () => {
             <div className="flex flex-row">
               <img src="./img/icons/Vector (1).svg" alt="" />
               <select
+                onChange={getInputValue}
                 className="outline-none px-2 py-2 w-full"
                 name="guests"
                 id="lws-guests"
@@ -119,7 +126,12 @@ export const BookingForm = () => {
             </div>
           </div>
 
-          <button className="addCity" type="submit" id="lws-addCity">
+          <button
+            disabled={count === 3 ? true : false}
+            className="addCity"
+            type="submit"
+            id="lws-addCity"
+          >
             <svg
               width="15px"
               height="15px"
